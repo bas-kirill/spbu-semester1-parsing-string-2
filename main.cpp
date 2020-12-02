@@ -2,7 +2,7 @@
 #include <string.h>
 using namespace std;
 
-const int MAXN = 10'000;
+const int MAXN = 256;
 
 
 
@@ -12,38 +12,22 @@ int main() {
     fgets(str, MAXN, stdin);
 
 
-    int idx = 0;
-    bool word = false;
-    int n = strlen(str);
-    for (int i = 0; i < n; ++i) {
-        if (str[i] == ' ') {
-            if (word)
-                str[idx++] = ' ';
-            word = false;
-        } else {
-            str[idx++] = str[i];
-            if (str[i] == '.') {
-                word = false;
-            } else {
-                word = true;
-            }
-        }
+    char words[MAXN];
+    memset(words, '\0', MAXN);
+    char *word = strtok(str, " .");
+    while (word != NULL) {
+        strcat(words, word);
+        strcat(words, " ");
+        word = strtok(NULL, " .\n");
     }
 
-    str[idx - 1] = '\0';
-    n = strlen(str);
-    for (int i = 0; i < n; ++i) {
-        if (str[i] == ' ' && str[i + 1] == '.') {
-            str[i] = '.';
-            str[i + 1] = ' ';
-        }
-    }
+    puts(words);
 
     char *lastWord = strrchr(str, ' ');
     lastWord = strtok(lastWord, " \n");
     printf("Last word: %s\n", lastWord);
 
-    char *currentWord = strtok(str, " .");
+    char *currentWord = strtok(words, " ");
     while (currentWord != NULL) {
         if (strcmp(lastWord, currentWord) != 0)
             printf("%s ", currentWord);
